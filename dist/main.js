@@ -49,6 +49,60 @@ class ListHTML {
 }
 
 
+/***/ }),
+
+/***/ "./src/html-elements/table-html.ts":
+/*!*****************************************!*\
+  !*** ./src/html-elements/table-html.ts ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "TableHTML": () => (/* binding */ TableHTML)
+/* harmony export */ });
+/**
+ * table-html.ts
+ *  Build ul or ol list with some elements
+ * @version 1.0.0
+ */
+class TableHTML {
+    constructor() {
+        this.headers = ['Name'];
+        this.data = [['Aubert'], ['Talut'], ['Saulay']];
+    }
+    setHeaders(headers) { this.headers = headers; }
+    setData(data) { this.data = data; }
+    build() {
+        // Create table element
+        const table = document.createElement('table');
+        // CRée l'entete du tableau
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        for (const header of this.headers) {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        // corp du tableau
+        const tbody = document.createElement('tbody');
+        for (const rowData of this.data) {
+            const row = document.createElement('tr');
+            for (const cellData of rowData) {
+                const cell = document.createElement('td');
+                cell.textContent = cellData;
+                row.appendChild(cell);
+            }
+            tbody.appendChild(row);
+        }
+        table.appendChild(tbody);
+        return table;
+    }
+}
+
+
 /***/ })
 
 /******/ 	});
@@ -115,6 +169,8 @@ var __webpack_exports__ = {};
   \*********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _html_elements_list_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./html-elements/list-html */ "./src/html-elements/list-html.ts");
+/* harmony import */ var _html_elements_table_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./html-elements/table-html */ "./src/html-elements/table-html.ts");
+
 
 /* import { ListHTML } from './html-elements/list-html'
 /
@@ -137,6 +193,10 @@ class Main {
         // New instance of ListHTML
         const listHTML = new _html_elements_list_html__WEBPACK_IMPORTED_MODULE_0__.ListHTML();
         app.appendChild(listHTML.build());
+        const tableHTML = new _html_elements_table_html__WEBPACK_IMPORTED_MODULE_1__.TableHTML();
+        tableHTML.setHeaders(['Name']);
+        tableHTML.setData([['Aubert'], ['Talut'], ['Saulay']]);
+        app.appendChild(tableHTML.build());
     }
 }
 /**
