@@ -2,55 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/html-elements/list-html.ts":
-/*!****************************************!*\
-  !*** ./src/html-elements/list-html.ts ***!
-  \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ListHTML": () => (/* binding */ ListHTML)
-/* harmony export */ });
-/**
- * list-html.ts
- *  Build ul or ol list with some elements
- * @version 1.0.0
- */
-class ListHTML {
-    constructor() {
-        /**
-         * Class attributes
-         */
-        this.listType = 'ul';
-        this.listContent = ['Aubert', 'Talut', 'Saulay']; // string[] <=> Array<string>
-    }
-    setListType(listType) {
-        this.listType = listType;
-    }
-    build() {
-        // Have to build a ul | ol list with as many li as listContent length
-        // <ul>
-        //  <li>Aubert</li>
-        //  <li>Talut</li>
-        //  <li>Saulay</li>
-        // </ul>
-        /**
-         * Create a new Object in the DOM
-         */
-        const list = document.createElement('ul');
-        for (const name of this.listContent) {
-            const line = document.createElement('li');
-            line.textContent = name;
-            list.appendChild(line);
-        }
-        return list;
-    }
-}
-
-
-/***/ }),
-
 /***/ "./src/html-elements/table-html.ts":
 /*!*****************************************!*\
   !*** ./src/html-elements/table-html.ts ***!
@@ -61,44 +12,64 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TableHTML": () => (/* binding */ TableHTML)
 /* harmony export */ });
+Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
 /**
- * table-html.ts
+ * list-html.ts
  *  Build ul or ol list with some elements
  * @version 1.0.0
  */
+
 class TableHTML {
     constructor() {
-        this.headers = ['Name'];
-        this.data = [['Aubert'], ['Talut'], ['Saulay']];
+        this.listContent = []; // string[] <=> Array<string>
+        this.table = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('table');
+        this.thead = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('thead');
+        this.tbody = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tbody');
+        this.tfoot = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tfoot');
+        this.cellDefs = new Set();
     }
-    setHeaders(headers) { this.headers = headers; }
-    setData(data) { this.data = data; }
-    build() {
-        // Create table element
-        const table = document.createElement('table');
-        // CRée l'entete du tableau
-        const thead = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        for (const header of this.headers) {
-            const th = document.createElement('th');
-            th.textContent = header;
-            headerRow.appendChild(th);
-        }
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-        // corp du tableau
-        const tbody = document.createElement('tbody');
-        for (const rowData of this.data) {
-            const row = document.createElement('tr');
-            for (const cellData of rowData) {
-                const cell = document.createElement('td');
-                cell.textContent = cellData;
-                row.appendChild(cell);
+    addContent(content) {
+        this.listContent = content;
+        //this.cellDefs.add(content.cellDef)
+        return this;
+    }
+    setCellDefs(cellDefs) {
+        cellDefs.forEach((cd) => {
+            this.cellDefs.add(cd);
+        });
+    }
+    compose() {
+        // Compose content of tbody
+        for (const content of this.listContent) {
+            // Remove cellDef from content
+            const cleanContent = {};
+            for (const property in content) {
+                if (property !== 'cellDef') {
+                    cleanContent[property] = content[property];
+                }
             }
-            tbody.appendChild(row);
+            const row = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tr');
+            // Loop over clean properties to add table divider
+            for (const property in cleanContent) {
+                const td = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('td');
+                td.setContent(cleanContent[property]);
+                row.addComponent(td);
+            }
+            this.tbody.addComponent(row);
         }
-        table.appendChild(tbody);
-        return table;
+        this.table.addComponent(this.tbody);
+        // Compose thead
+        const row = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tr');
+        this.cellDefs.forEach((cd) => {
+            const th = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('th');
+            th.setContent(cd);
+            row.addComponent(th);
+        });
+        this.thead.addComponent(row);
+        this.table.addComponent(this.thead);
+    }
+    build() {
+        return this.table.build();
     }
 }
 
@@ -168,41 +139,91 @@ var __webpack_exports__ = {};
   !*** ./src/main.ts ***!
   \*********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _html_elements_list_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./html-elements/list-html */ "./src/html-elements/list-html.ts");
-/* harmony import */ var _html_elements_table_html__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./html-elements/table-html */ "./src/html-elements/table-html.ts");
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Main": () => (/* binding */ Main)
+/* harmony export */ });
+/* harmony import */ var _html_elements_table_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./html-elements/table-html */ "./src/html-elements/table-html.ts");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module './scss/main.scss'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 
 
-/* import { ListHTML } from './html-elements/list-html'
-/
+/**
  * main.ts
- * @author Max
+ * @author Aélion <jean-luc.aubert@aelion.fr>
  * @version 1.0.0
  *
  * Entry point of our frontend application
  */
 class Main {
     constructor() {
-        let myName;
-        myName = 'Jean-Luc';
-        /*
-        * Récupère dans le DOM (Document Object Model) le premier Objet (élément HTML)
-        * qui dispose d'un attribut "app"
-        */
-        const app = document.querySelector('[app]');
-        app.innerHTML = myName;
-        // New instance of ListHTML
-        const listHTML = new _html_elements_list_html__WEBPACK_IMPORTED_MODULE_0__.ListHTML();
-        app.appendChild(listHTML.build());
-        const tableHTML = new _html_elements_table_html__WEBPACK_IMPORTED_MODULE_1__.TableHTML();
-        tableHTML.setHeaders(['Name']);
-        tableHTML.setData([['Aubert'], ['Talut'], ['Saulay']]);
-        app.appendChild(tableHTML.build());
+        this.app = document.querySelector('[app]');
+        // Instance of HtmlTable
+        //this.getDatas()
+    }
+    getDatas() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const datas = yield this.studentList();
+            const names = datas
+                .map((data) => {
+                return {
+                    name: data.lastName,
+                    firstname: data.firstName
+                };
+            });
+            const tableEl = new _html_elements_table_html__WEBPACK_IMPORTED_MODULE_0__.TableHTML();
+            tableEl.addContent(names);
+            tableEl.compose();
+            this.app.appendChild(tableEl.build());
+        });
+    }
+    studentList() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const endPoint = 'http://127.0.0.1:5000/api/v1/students';
+            return fetch(endPoint).then((response) => {
+                return response.json();
+            });
+        });
     }
 }
 /**
-* Launch app
-*/
+ * Launch app
+ */
 const main = new Main();
+/**
+ * Event handling with JS
+ */
+const formFields = new Map([
+    ['lastName', {}],
+    ['email', {}],
+    ['login', {}],
+    ['password', {}]
+]);
+window.keyupHandler = (el) => {
+    // Assume form is valid
+    let formIsValid = true;
+    formFields.forEach((value, key) => {
+        const field = document.querySelector('input[name="' + value + ']"'); // `input[name="${value}"]``
+        if (field.value.trim().length === 0) {
+            formIsValid = false;
+            return;
+        }
+    });
+    // Now change the disabled
+    if (formIsValid) {
+        document.querySelector('#student-form button').removeAttribute('disabled');
+    }
+    else {
+        document.querySelector('#student-form button').setAttribute('disabled', 'disabled');
+    }
+};
 
 })();
 

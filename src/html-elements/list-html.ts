@@ -32,6 +32,6 @@ export class ListHTML {
             line.textContent = name
             list.appendChild(line)
         }
-        return list;
+        return list
     }
 }
