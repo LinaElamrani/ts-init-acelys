@@ -2,6 +2,18 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/scss/main.scss":
+/*!****************************!*\
+  !*** ./src/scss/main.scss ***!
+  \****************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./src/html-elements/table-html.ts":
 /*!*****************************************!*\
   !*** ./src/html-elements/table-html.ts ***!
@@ -12,7 +24,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "TableHTML": () => (/* binding */ TableHTML)
 /* harmony export */ });
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./../patterns/composite/composite */ "./src/patterns/composite/composite.ts");
 /**
  * list-html.ts
  *  Build ul or ol list with some elements
@@ -22,10 +34,10 @@ Object(function webpackMissingModule() { var e = new Error("Cannot find module '
 class TableHTML {
     constructor() {
         this.listContent = []; // string[] <=> Array<string>
-        this.table = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('table');
-        this.thead = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('thead');
-        this.tbody = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tbody');
-        this.tfoot = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tfoot');
+        this.table = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('table');
+        this.thead = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('thead');
+        this.tbody = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('tbody');
+        this.tfoot = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('tfoot');
         this.cellDefs = new Set();
     }
     addContent(content) {
@@ -48,10 +60,10 @@ class TableHTML {
                     cleanContent[property] = content[property];
                 }
             }
-            const row = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tr');
+            const row = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('tr');
             // Loop over clean properties to add table divider
             for (const property in cleanContent) {
-                const td = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('td');
+                const td = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('td');
                 td.setContent(cleanContent[property]);
                 row.addComponent(td);
             }
@@ -59,9 +71,9 @@ class TableHTML {
         }
         this.table.addComponent(this.tbody);
         // Compose thead
-        const row = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('tr');
+        const row = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('tr');
         this.cellDefs.forEach((cd) => {
-            const th = new Object(function webpackMissingModule() { var e = new Error("Cannot find module './../patterns/composite/composite'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())('th');
+            const th = new _patterns_composite_composite__WEBPACK_IMPORTED_MODULE_0__.Composite('th');
             th.setContent(cd);
             row.addComponent(th);
         });
@@ -71,6 +83,77 @@ class TableHTML {
     build() {
         return this.table.build();
     }
+}
+
+
+/***/ }),
+
+/***/ "./src/patterns/composite/composite.ts":
+/*!*********************************************!*\
+  !*** ./src/patterns/composite/composite.ts ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Composite": () => (/* binding */ Composite)
+/* harmony export */ });
+/* harmony import */ var _html_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./html-component */ "./src/patterns/composite/html-component.ts");
+
+class Composite extends _html_component__WEBPACK_IMPORTED_MODULE_0__.HTMLComponent {
+    constructor(componentType) {
+        super(componentType);
+        this.children = [];
+    }
+    addComponent(component) {
+        this.children.push(component);
+        component.setParent(this);
+    }
+    build() {
+        const el = document.createElement(this.componentType);
+        if (this.content && this.content.trim().length) {
+            el.textContent = this.content;
+        }
+        if (this.children.length) {
+            for (const child of this.children) {
+                el.appendChild(child.build());
+            }
+        }
+        return el;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/patterns/composite/html-component.ts":
+/*!**************************************************!*\
+  !*** ./src/patterns/composite/html-component.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HTMLComponent": () => (/* binding */ HTMLComponent)
+/* harmony export */ });
+class HTMLComponent {
+    constructor(componentType) {
+        this.componentType = componentType;
+    }
+    setParent(parent) {
+        this.parent = parent;
+    }
+    getParent() {
+        return this.parent;
+    }
+    setContent(content) {
+        this.content = content;
+    }
+    setComponentType(type) {
+        this.componentType = type;
+    }
+    addComponent(component) { }
+    ;
 }
 
 
@@ -143,7 +226,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Main": () => (/* binding */ Main)
 /* harmony export */ });
 /* harmony import */ var _html_elements_table_html__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./html-elements/table-html */ "./src/html-elements/table-html.ts");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './scss/main.scss'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _scss_main_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/main.scss */ "./src/scss/main.scss");
 var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -210,7 +293,7 @@ window.keyupHandler = (el) => {
     // Assume form is valid
     let formIsValid = true;
     formFields.forEach((value, key) => {
-        const field = document.querySelector('input[name="' + value + ']"'); // `input[name="${value}"]``
+        const field = document.querySelector('input[name="' + key + '"]');
         if (field.value.trim().length === 0) {
             formIsValid = false;
             return;
@@ -223,6 +306,19 @@ window.keyupHandler = (el) => {
     else {
         document.querySelector('#student-form button').setAttribute('disabled', 'disabled');
     }
+};
+window.onSubmit = (event) => {
+    event.preventDefault();
+    let form = {};
+    formFields.forEach((value, key) => {
+        const field = document.querySelector('input[name="' + key + '"]');
+        form[key] = field.value;
+    });
+    const firstNameField = document.querySelector('input[name="firstName"]');
+    const phoneNumberField = document.querySelector('input[name="phoneNumber"]');
+    form.firstName = firstNameField.value;
+    form.phoneNumber = phoneNumberField.value;
+    console.log(`Form was : ${JSON.stringify(form)}`);
 };
 
 })();

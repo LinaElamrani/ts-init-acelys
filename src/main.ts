@@ -65,18 +65,35 @@ const formFields: Map<string, any> = new Map<string, any>([
     // Assume form is valid
     let formIsValid: boolean = true
 
-    formFields.forEach((value: any, key: string) => {
-        const field: HTMLInputElement = document.querySelector('input[name="' + value + ']"') // `input[name="${value}"]``
-        if (field.value.trim().length === 0) {
-            formIsValid = false
-            return
-        }
-    })
 
+    formFields.forEach((value: any, key: string) => {
+      const field: HTMLInputElement = document.querySelector('input[name="' + key + '"]')
+      if (field.value.trim().length === 0) {
+          formIsValid = false
+          return
+      }
+  })
     // Now change the disabled
     if (formIsValid) {
         document.querySelector('#student-form button').removeAttribute('disabled')
     } else {
         document.querySelector('#student-form button').setAttribute('disabled', 'disabled')
     }
+}
+
+(window as any).onSubmit = (event: any) => {
+    event.preventDefault()
+
+    let form: any = {}
+    formFields.forEach((value: string, key: string) => {
+      const field: HTMLInputElement = document.querySelector('input[name="' + key + '"]')
+      form[key] = field.value
+    })
+    const firstNameField: HTMLInputElement = document.querySelector('input[name="firstName"]')
+    const phoneNumberField: HTMLInputElement = document.querySelector('input[name="phoneNumber"]')
+
+    form.firstName = firstNameField.value
+    form.phoneNumber = phoneNumberField.value
+
+    console.log(`Form was : ${JSON.stringify(form)}`)
 }
